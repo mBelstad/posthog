@@ -322,6 +322,9 @@ services:
         extends:
             file: docker-compose.base.yml
             service: proxy
+        # docker-compose.base.yml embeds CADDY_HOST inside CADDYFILE during
+        # deployment interpolation. The Coolify application must define
+        # CADDY_HOST=:80 so Caddy listens on the port exposed to Traefik.
         logging: *default-logging
         labels:
             - traefik.enable=true

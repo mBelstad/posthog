@@ -1,4 +1,5 @@
 # Generated from docker-compose.coolify.yml with Docker Compose v5.
+# The Coolify application must define CADDY_HOST=:80 for deployment interpolation.
 # This resolved form avoids Coolify parser limitations around extends and custom YAML tags.
 # Regenerate and validate it whenever the pinned hobby release changes.
 name: posthog
