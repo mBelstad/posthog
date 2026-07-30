@@ -20992,7 +20992,7 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
        * * `Billit` - Billit
        * * `Moxie` - Moxie
        * * `TripleWhale` - TripleWhale
@@ -22714,7 +22714,14 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
+       * * `Billit` - Billit
+       * * `Moxie` - Moxie
+       * * `TripleWhale` - TripleWhale
+       * * `Directus` - Directus
+       * * `Clay` - Clay
+       * * `TradableBits` - TradableBits
+       * * `Swan` - Swan */
       readonly source_type: ExternalDataSourceTypeEnum;
       /** Human-readable name to show in the picker (falls back to the source type). */
       readonly label: string;
@@ -29957,7 +29964,7 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
        * * `Billit` - Billit
        * * `Moxie` - Moxie
        * * `TripleWhale` - TripleWhale
@@ -31263,7 +31270,7 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
        * * `Billit` - Billit
        * * `Moxie` - Moxie
        * * `TripleWhale` - TripleWhale
@@ -64452,7 +64459,7 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
        * * `Billit` - Billit
        * * `Moxie` - Moxie
        * * `TripleWhale` - TripleWhale
@@ -65766,7 +65773,7 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
        * * `Billit` - Billit
        * * `Moxie` - Moxie
        * * `TripleWhale` - TripleWhale
@@ -67072,7 +67079,7 @@ export namespace Schemas {
        * * `Typesense` - Typesense
        * * `FirstPromoter` - FirstPromoter
        * * `Zero` - Zero
-       * * `Inth` - Inth */
+       * * `Inth` - Inth
        * * `Billit` - Billit
        * * `Moxie` - Moxie
        * * `TripleWhale` - TripleWhale

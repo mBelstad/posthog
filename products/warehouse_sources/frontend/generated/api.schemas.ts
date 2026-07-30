@@ -4366,7 +4366,7 @@ export interface ExternalDataSourceCreateApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
      * * `Billit` - Billit
      * * `Moxie` - Moxie
      * * `TripleWhale` - TripleWhale
@@ -5854,7 +5854,7 @@ export interface ExternalDataSourceConnectionOptionApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
      * * `Billit` - Billit
      * * `Moxie` - Moxie
      * * `TripleWhale` - TripleWhale
@@ -7155,7 +7155,7 @@ export interface DatabaseSchemaRequestApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
      * * `Billit` - Billit
      * * `Moxie` - Moxie
      * * `TripleWhale` - TripleWhale
@@ -8433,7 +8433,14 @@ export interface DirectConnectionSourceOptionApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
+     * * `Billit` - Billit
+     * * `Moxie` - Moxie
+     * * `TripleWhale` - TripleWhale
+     * * `Directus` - Directus
+     * * `Clay` - Clay
+     * * `TradableBits` - TradableBits
+     * * `Swan` - Swan */
     readonly source_type: ExternalDataSourceTypeEnumApi
     /** Human-readable name to show in the picker (falls back to the source type). */
     readonly label: string
@@ -9789,7 +9796,7 @@ export interface SourcePreviewRequestApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
      * * `Billit` - Billit
      * * `Moxie` - Moxie
      * * `TripleWhale` - TripleWhale
@@ -11102,7 +11109,7 @@ export interface SourceSetupApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
      * * `Billit` - Billit
      * * `Moxie` - Moxie
      * * `TripleWhale` - TripleWhale
@@ -12422,7 +12429,7 @@ export interface SourceCredentialCreateApi {
      * * `Typesense` - Typesense
      * * `FirstPromoter` - FirstPromoter
      * * `Zero` - Zero
-     * * `Inth` - Inth */
+     * * `Inth` - Inth
      * * `Billit` - Billit
      * * `Moxie` - Moxie
      * * `TripleWhale` - TripleWhale
