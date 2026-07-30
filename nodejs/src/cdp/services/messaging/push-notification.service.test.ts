@@ -7,6 +7,7 @@ import { EncryptedFields } from '~/cdp/utils/encryption-utils'
 import { parseJSON } from '~/common/utils/json-parse'
 
 import { IntegrationManagerService } from '../managers/integration-manager.service'
+import { MessageAssetsService } from './message-assets.service'
 import { PushNotificationFetchUtils, PushNotificationService } from './push-notification.service'
 
 const encryptedFields = new EncryptedFields('01234567890123456789012345678901')
@@ -234,6 +235,92 @@ describe('PushNotificationService', () => {
             // No token means nothing was delivered — record push_skipped, not push_sent.
             expect(result.metrics).toContainEqual(expect.objectContaining({ metric_name: 'push_skipped', count: 1 }))
             expect(result.metrics).not.toContainEqual(expect.objectContaining({ metric_name: 'push_sent' }))
+        })
+
+        describe('message asset capture', () => {
+            let serviceWithAssets: PushNotificationService
+
+            const respondWith = (status: number): void => {
+                mockTrackedFetch.mockResolvedValue({
+                    fetchError: null,
+                    fetchResponse: {
+                        status,
+                        headers: {},
+                        text: () => Promise.resolve('{}'),
+                        dump: () => Promise.resolve(),
+                    },
+                    fetchDuration: 10,
+                })
+            }
+
+            beforeEach(() => {
+                serviceWithAssets = new PushNotificationService(
+                    integrationManager,
+                    encryptedFields,
+                    fetchUtils,
+                    mockRedis,
+                    new MessageAssetsService({ produce: jest.fn() } as any)
+                )
+            })
+
+            // Guards the wiring between the send and the Assets tab, which the `buildRowForPush` unit
+            // tests can't see: drop the assets service from the constructor call in cdp-services.ts, or
+            // narrow the capture condition, and a delivered push stops producing a row while every
+            // other test here stays green.
+            it.each([
+                {
+                    outcome: 'was delivered',
+                    status: 200,
+                    tokens: { '$device_push_subscription_test-project': 'device-token-123' },
+                    captured: 'sent',
+                },
+                { outcome: 'reached no device', status: 200, tokens: {}, captured: 'skipped' },
+                {
+                    outcome: 'failed terminally',
+                    status: 400,
+                    tokens: { '$device_push_subscription_test-project': 'device-token-123' },
+                    captured: 'nothing',
+                },
+            ])('captures a push that $outcome as $captured', async ({ status, tokens, captured }) => {
+                respondWith(status)
+                const invocation = createSendPushNotificationInvocation(
+                    Object.fromEntries(
+                        Object.entries(tokens).map(([key, token]) => [key, encryptedFields.encrypt(token)])
+                    )
+                )
+                invocation.state.actionId = 'action_push_1'
+
+                const result = await serviceWithAssets.executeSendPushNotification(invocation)
+
+                if (captured === 'nothing') {
+                    // Nothing was delivered, so there is no notification to show a customer.
+                    expect(result.emailAssets).toEqual([])
+                    return
+                }
+                expect(result.emailAssets).toHaveLength(1)
+                expect(result.emailAssets[0]).toMatchObject({
+                    kind: 'push',
+                    status: captured,
+                    action_id: 'action_push_1',
+                    subject: 'Test notification',
+                })
+            })
+
+            it('captures one asset per notification, not one per delivered channel', async () => {
+                respondWith(200)
+                integrationManager.get = jest
+                    .fn()
+                    .mockResolvedValue({ ...firebaseIntegration, kind: 'firebase' as const })
+                const invocation = createSendPushNotificationInvocation({
+                    '$device_push_subscription_test-project': encryptedFields.encrypt('device-token-123'),
+                })
+                invocation.state.actionId = 'action_push_1'
+                ;(invocation.queueParameters as any).integrationIds = [1, 2]
+
+                const result = await serviceWithAssets.executeSendPushNotification(invocation)
+
+                expect(result.emailAssets).toHaveLength(1)
+            })
         })
 
         it('does not match tokens for a different app identifier', async () => {
