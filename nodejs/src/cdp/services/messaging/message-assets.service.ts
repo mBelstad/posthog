@@ -151,8 +151,8 @@ export class MessageAssetsService {
 
     // One row per push step, not per channel. A step fans out to several provider integrations, but the
     // recipient experiences a single notification, so the person view should show one entry rather than
-    // a near-identical row per channel. `platforms` is what actually took delivery; empty means nothing
-    // was reachable, which is recorded as skipped rather than dropped so the attempt stays visible.
+    // a near-identical row per channel. `platforms` is what actually took delivery, and the caller only
+    // builds a row once at least one channel has, so this is only ever a delivered notification.
     buildRowForPush(
         invocation: CyclotronJobInvocationHogFunction,
         params: CyclotronInvocationQueueParametersSendPushNotificationType,
@@ -163,6 +163,10 @@ export class MessageAssetsService {
         }
         const payload = params.payload
         if (!payload?.title) {
+            return null
+        }
+        // Nothing took delivery, so there is no notification a recipient saw to snapshot.
+        if (platforms.length === 0) {
             return null
         }
         return {
@@ -177,7 +181,7 @@ export class MessageAssetsService {
             person_id: invocation.state.globals.person?.id ?? '',
             recipient: platforms.join(', '),
             subject: payload.title,
-            status: platforms.length > 0 ? 'sent' : 'skipped',
+            status: 'sent',
             sent_at: isoMicroseconds(new Date()),
             version: microsecondsSinceEpoch(),
             is_deleted: 0,

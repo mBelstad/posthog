@@ -316,8 +316,10 @@ export class PushNotificationService {
 
         // Captured at the terminal outcome for the same reason the business metrics are: a rescheduled
         // attempt returns earlier, so a retried notification produces one asset rather than one per try.
-        // Outright failures capture nothing — there is no delivered notification to show a customer.
-        if (this.messageAssetsService && (successCount > 0 || skippedCount > 0)) {
+        // Only a delivered notification is captured, matching email: an asset is a snapshot of what a
+        // recipient received, and a skip has no recipient. Skips stay visible as `push_skipped` plus the
+        // per-channel run log explaining why.
+        if (this.messageAssetsService && successCount > 0) {
             const assetRow = this.messageAssetsService.buildRowForPush(invocation, params, [...deliveredPlatforms])
             if (assetRow) {
                 result.emailAssets.push(assetRow)

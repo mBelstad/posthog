@@ -86,8 +86,7 @@ class MessageAssetSerializer(serializers.Serializer):
     )
     subject = serializers.CharField(help_text="The email subject line, or the push notification title.")
     status = serializers.CharField(
-        help_text="Delivery status at capture time: 'sent', or 'skipped' when a push had no reachable "
-        "platform (the attempt is still recorded)."
+        help_text="Delivery status at capture time. Currently always 'sent' - only delivered messages are captured."
     )
     sent_at = serializers.DateTimeField(help_text="When the message was sent.")
 

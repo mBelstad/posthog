@@ -308,7 +308,7 @@ describe('PushNotificationService', () => {
                     tokens: { '$device_push_subscription_test-project': 'device-token-123' },
                     captured: 'sent',
                 },
-                { outcome: 'reached no device', status: 200, tokens: {}, captured: 'skipped' },
+                { outcome: 'reached no device', status: 200, tokens: {}, captured: 'nothing' },
                 {
                     outcome: 'failed terminally',
                     status: 400,
@@ -327,7 +327,8 @@ describe('PushNotificationService', () => {
                 const result = await serviceWithAssets.executeSendPushNotification(invocation)
 
                 if (captured === 'nothing') {
-                    // Nothing was delivered, so there is no notification to show a customer.
+                    // An asset is a snapshot of what a recipient received; a send that reached nobody
+                    // has none, and email behaves the same way (it captures only on success).
                     expect(result.emailAssets).toEqual([])
                     return
                 }

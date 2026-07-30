@@ -145,13 +145,13 @@ describe('MessageAssetsService', () => {
             expect(row!.html).toContain('Track it in the app')
         })
 
-        it('records a push that reached no device as skipped, so the attempt stays visible', () => {
-            // Nobody registered a device for this person. Dropping the row entirely would make the
-            // person view look like the workflow never tried to notify them.
+        it('captures nothing when the push reached no device', () => {
+            // An asset is a snapshot of what a recipient received, so a send that reached nobody has
+            // nothing to show — it would render as an ordinary row with a blank recipient. The attempt
+            // stays visible through the `push_skipped` metric and the run log explaining why.
             const row = service.buildRowForPush(invocationWithAction('flow-1'), pushParams(), [])
 
-            expect(row!.status).toBe('skipped')
-            expect(row!.recipient).toBe('')
+            expect(row).toBeNull()
         })
 
         it('keeps the custom data payload out of the stored preview', () => {
