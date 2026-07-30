@@ -36,6 +36,11 @@ services:
       default: null
     restart: "no"
   capture:
+    build:
+      args:
+        BIN: capture
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     environment:
       ADDRESS: 0.0.0.0:3000
       CAPTURE_MODE: events
@@ -129,6 +134,11 @@ services:
         type: volume
         volume: {}
   cyclotron-janitor:
+    build:
+      args:
+        BIN: cyclotron-janitor
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -150,6 +160,11 @@ services:
       default: null
     restart: on-failure
   cymbal:
+    build:
+      args:
+        BIN: cymbal
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -265,6 +280,11 @@ services:
         type: volume
         volume: {}
   feature-flags:
+    build:
+      args:
+        BIN: feature-flags
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_started
@@ -329,6 +349,11 @@ services:
         type: volume
         volume: {}
   hypercache-server:
+    build:
+      args:
+        BIN: hypercache-server
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       redis7:
         condition: service_started
@@ -674,6 +699,11 @@ services:
         type: volume
         volume: {}
   personhog-replica:
+    build:
+      args:
+        BIN: personhog-replica
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -693,6 +723,11 @@ services:
       default: null
     restart: on-failure
   personhog-router:
+    build:
+      args:
+        BIN: personhog-router
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       personhog-replica:
         condition: service_started
@@ -773,6 +808,11 @@ services:
         type: volume
         volume: {}
   property-defs-rs:
+    build:
+      args:
+        BIN: property-defs-rs
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
@@ -1040,6 +1080,11 @@ services:
         type: volume
         volume: {}
   replay-capture:
+    build:
+      args:
+        BIN: capture
+      context: ./posthog/rust
+      dockerfile: Dockerfile
     environment:
       ADDRESS: 0.0.0.0:3000
       CAPTURE_MODE: recordings

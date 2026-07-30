@@ -419,7 +419,8 @@ services:
         extends:
             file: docker-compose.base.yml
             service: cyclotron-janitor
-        build: !reset null
+        build:
+            context: ./posthog/rust
         logging: *default-logging
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -431,21 +432,24 @@ services:
                 condition: service_started
 
     capture:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: capture
         logging: *default-logging
 
     replay-capture:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: replay-capture
         logging: *default-logging
 
     property-defs-rs:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: property-defs-rs
@@ -467,7 +471,8 @@ services:
             - ./posthog/docker/livestream/configs-hobby.yml:/configs/configs.yml
 
     personhog-replica:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: personhog-replica
@@ -479,7 +484,8 @@ services:
                 condition: service_healthy
 
     personhog-router:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: personhog-router
@@ -488,7 +494,8 @@ services:
             - personhog-replica
 
     feature-flags:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: feature-flags
@@ -498,7 +505,8 @@ services:
             - redis7
 
     hypercache-server:
-        build: !reset null
+        build:
+            context: ./posthog/rust
         extends:
             file: docker-compose.base.yml
             service: hypercache-server
@@ -571,7 +579,10 @@ services:
 
     cymbal:
         image: ghcr.io/posthog/posthog/cymbal:master
-        build: !reset null
+        build:
+            context: ./posthog/rust
+            args:
+                BIN: cymbal
         restart: on-failure
         logging: *default-logging
         volumes:
