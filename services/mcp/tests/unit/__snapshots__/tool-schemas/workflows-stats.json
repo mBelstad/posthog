@@ -42,6 +42,11 @@
             "description": "Comma-separated metric names to filter by.",
             "minLength": 1,
             "type": "string"
+        },
+        "version": {
+            "description": "Only count metrics produced by this version of the object's config, e.g. one published version of a workflow. Omit to count every version. Supported where the producer records the version it ran; otherwise this returns no data.",
+            "minimum": 1,
+            "type": "number"
         }
     },
     "required": ["id"],
