@@ -500,6 +500,7 @@ services:
       DATABASE_URL: postgres://posthog:posthog@db:5432/posthog
       KAFKA_HOSTS: kafka:9092
       LOGS_REDIS_HOST: redis7
+      LOGS_REDIS_TLS: "false"
       PLUGIN_SERVER_MODE: ingestion-logs
       REDIS_URL: redis://redis7:6379/
     image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
@@ -573,6 +574,7 @@ services:
       PLUGIN_SERVER_MODE: ingestion-traces
       REDIS_URL: redis://redis7:6379/
       TRACES_REDIS_HOST: redis7
+      TRACES_REDIS_TLS: "false"
     image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
     logging:
       driver: json-file

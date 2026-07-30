@@ -297,6 +297,10 @@ services:
             file: docker-compose.base.yml
             service: ingestion-logs
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
+        environment:
+            # The hobby stack uses plain Redis. Node defaults this secondary
+            # logs connection to TLS in production unless explicitly disabled.
+            LOGS_REDIS_TLS: 'false'
         logging: *default-logging
         volumes:
             - posthog-share:/share
@@ -310,6 +314,8 @@ services:
             file: docker-compose.base.yml
             service: ingestion-traces
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
+        environment:
+            TRACES_REDIS_TLS: 'false'
         logging: *default-logging
         volumes:
             - posthog-share:/share
