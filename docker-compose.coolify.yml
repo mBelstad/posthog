@@ -465,6 +465,9 @@ services:
                 condition: service_healthy
 
     livestream:
+        build:
+            context: ./livestream
+            dockerfile: Dockerfile
         extends:
             file: docker-compose.base.yml
             service: livestream
