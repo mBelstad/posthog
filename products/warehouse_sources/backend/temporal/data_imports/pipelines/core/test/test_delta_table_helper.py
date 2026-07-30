@@ -1233,6 +1233,19 @@ class TestIsTransientDeltaMaintenanceError:
             ("unrelated_delta_error", deltalake.exceptions.DeltaError("no protocol found in delta log"), False),
             # Same message shape but not the DeltaError type delta-rs actually raises for it.
             ("wrong_exception_type", RuntimeError("Optimize selected-file scan failed"), False),
+            # A concurrent `reset_table` purging the whole prefix (e.g. a full_refresh sync) out from
+            # under a still-running maintenance pass: safe to skip and retry.
+            (
+                "missing_delta_log_commit_file",
+                deltalake.exceptions.DeltaError(
+                    "Generic error: Kernel error: File not found: "
+                    "dlt/team_1_source_2/table/_delta_log/00000000000000000001.json"
+                ),
+                True,
+            ),
+            # "File not found" alone, without the log directory, must not match - a missing data file
+            # for some other reason is a real failure to capture, not this specific log-commit race.
+            ("file_not_found_outside_delta_log", deltalake.exceptions.DeltaError("File not found: some/file"), False),
         ]
     )
     def test_matches_only_the_racy_optimize_scan_signature(self, _name: str, error: Exception, expected: bool):

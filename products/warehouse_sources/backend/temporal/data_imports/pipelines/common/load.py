@@ -274,6 +274,7 @@ async def _run_delta_maintenance(
     logger: FilteringBoundLogger,
 ) -> None:
     from products.warehouse_sources.backend.temporal.data_imports.pipelines.core.delta_table_helper import (  # noqa: PLC0415 — keeps the heavy deltalake dep off this module's top-level import path
+        is_transient_delta_maintenance_error,
         is_transient_object_store_error,
     )
 
@@ -314,6 +315,8 @@ async def _run_delta_maintenance(
                 # A rate-limited or connectivity blip talking to our own S3 bucket isn't a bug - the
                 # next tick's maintenance pass retries the same idempotent cleanup.
                 logger.warning(f"Delta maintenance skipped: transient object-store error: {e}")
+            elif is_transient_delta_maintenance_error(e):
+                logger.warning(f"Delta maintenance skipped: transient maintenance error: {e}")
             else:
                 capture_exception(e)
                 logger.exception(f"Delta maintenance failed: {e}", exc_info=e)
@@ -325,6 +328,8 @@ async def _run_delta_maintenance(
         except Exception as e:
             if is_transient_object_store_error(e):
                 logger.warning(f"Compaction skipped: transient object-store error: {e}")
+            elif is_transient_delta_maintenance_error(e):
+                logger.warning(f"Compaction skipped: transient maintenance error: {e}")
             else:
                 capture_exception(e)
                 logger.exception(f"Compaction failed: {e}", exc_info=e)

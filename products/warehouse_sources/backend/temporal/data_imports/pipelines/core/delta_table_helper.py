@@ -90,9 +90,20 @@ TRANSIENT_DELTA_MAINTENANCE_ERRORS = ("Optimize selected-file scan failed",)
 
 
 def is_transient_delta_maintenance_error(error: BaseException) -> bool:
-    return isinstance(error, deltalake.exceptions.DeltaError) and any(
-        needle in str(error) for needle in TRANSIENT_DELTA_MAINTENANCE_ERRORS
-    )
+    if not isinstance(error, deltalake.exceptions.DeltaError):
+        return False
+
+    text = str(error)
+    if any(needle in text for needle in TRANSIENT_DELTA_MAINTENANCE_ERRORS):
+        return True
+
+    # A zombie's compact/vacuum can also lose a commit file from under it: `reset_table` (full_refresh)
+    # purges the whole table prefix, including `_delta_log`, out from under a still-running maintenance
+    # pass that opened the table before the purge. Neither vacuum nor optimize.compact ever delete a
+    # `_delta_log/*.json` commit file themselves, so a missing one here means something else raced the
+    # read, not a corrupt table — that's why this checks for the log directory specifically rather than
+    # matching "File not found" alone, which a genuinely missing/corrupt table can also raise.
+    return "File not found" in text and "_delta_log/" in text
 
 
 def _delta_merge_spill_kwargs() -> dict[str, int]:
