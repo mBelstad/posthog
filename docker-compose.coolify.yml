@@ -177,6 +177,7 @@ services:
             CDP_REDIS_PORT: 6379
             ENCRYPTION_SALT_KEYS: $ENCRYPTION_SALT_KEYS
             CYCLOTRON_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
+            CYCLOTRON_NODE_DATABASE_URL: 'postgres://posthog:posthog@db:5432/cyclotron_node'
             PERSONS_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             BEHAVIORAL_COHORTS_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             PERSONHOG_ADDR: 'personhog-router:50052'
