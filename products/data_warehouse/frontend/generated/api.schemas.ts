@@ -2521,6 +2521,13 @@ export interface CredentialApi {
  * * `FirstPromoter` - FirstPromoter
  * * `Zero` - Zero
  * * `Inth` - Inth
+ * * `Billit` - Billit
+ * * `Moxie` - Moxie
+ * * `TripleWhale` - TripleWhale
+ * * `Directus` - Directus
+ * * `Clay` - Clay
+ * * `TradableBits` - TradableBits
+ * * `Swan` - Swan
  */
 export type ExternalDataSourceTypeEnumApi =
     (typeof ExternalDataSourceTypeEnumApi)[keyof typeof ExternalDataSourceTypeEnumApi]
@@ -3788,6 +3795,13 @@ export const ExternalDataSourceTypeEnumApi = {
     FirstPromoter: 'FirstPromoter',
     Zero: 'Zero',
     Inth: 'Inth',
+    Billit: 'Billit',
+    Moxie: 'Moxie',
+    TripleWhale: 'TripleWhale',
+    Directus: 'Directus',
+    Clay: 'Clay',
+    TradableBits: 'TradableBits',
+    Swan: 'Swan',
 } as const
 
 export interface SimpleExternalDataSourceSerializersApi {
