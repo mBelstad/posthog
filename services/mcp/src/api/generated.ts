@@ -39758,7 +39758,7 @@ export namespace Schemas {
       recipient: string;
       /** The email subject line, or the push notification title. */
       subject: string;
-      /** Delivery status at capture time: 'sent', or 'skipped' when a push had no reachable platform (the attempt is still recorded). */
+      /** Delivery status at capture time. Currently always 'sent' - only delivered messages are captured. */
       status: string;
       /** When the message was sent. */
       sent_at: string;
