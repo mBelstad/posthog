@@ -39754,13 +39754,13 @@ export namespace Schemas {
       distinct_id: string;
       /** The recipient's person UUID, if resolved. */
       person_id: string;
-      /** The recipient email address. */
+      /** Where the message went: the email address for 'email', or the push platforms that took delivery for 'push' (empty when none were reachable). */
       recipient: string;
-      /** The email subject line. */
+      /** The email subject line, or the push notification title. */
       subject: string;
-      /** Delivery status at capture time. Currently always 'sent'. */
+      /** Delivery status at capture time: 'sent', or 'skipped' when a push had no reachable platform (the attempt is still recorded). */
       status: string;
-      /** When the email was sent. */
+      /** When the message was sent. */
       sent_at: string;
     }
 
