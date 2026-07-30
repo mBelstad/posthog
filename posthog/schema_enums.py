@@ -2450,6 +2450,13 @@ class ExternalDataSourceType(StrEnum):
     FIRST_PROMOTER = "FirstPromoter"
     ZERO = "Zero"
     INTH = "Inth"
+    BILLIT = "Billit"
+    MOXIE = "Moxie"
+    TRIPLE_WHALE = "TripleWhale"
+    DIRECTUS = "Directus"
+    CLAY = "Clay"
+    TRADABLE_BITS = "TradableBits"
+    SWAN = "Swan"
 
 
 class ExternalQueryErrorCode(StrEnum):

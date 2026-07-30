@@ -23996,7 +23996,14 @@
                 "Typesense",
                 "FirstPromoter",
                 "Zero",
-                "Inth"
+                "Inth",
+                "Billit",
+                "Moxie",
+                "TripleWhale",
+                "Directus",
+                "Clay",
+                "TradableBits",
+                "Swan"
             ],
             "type": "string"
         },
