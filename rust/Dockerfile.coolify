@@ -12,7 +12,7 @@ FROM base AS planner
 WORKDIR /app
 ARG BIN
 ARG BUILD_FEATURES=""
-ENV PROTO_ROOT=proto
+ENV PROTO_ROOT=../proto
 
 COPY rust/ .
 COPY proto/ ./proto
@@ -22,7 +22,7 @@ FROM base AS builder
 WORKDIR /app
 ARG BIN
 ARG BUILD_FEATURES=""
-ENV PROTO_ROOT=proto
+ENV PROTO_ROOT=../proto
 
 RUN apt-get update && apt-get install build-essential libssl-dev pkg-config cmake libclang-dev protobuf-compiler -y
 
