@@ -14,7 +14,7 @@ services:
     deploy:
       replicas: 0
     env_file:
-      - path: .env.services
+      - path: ./.env.services
         required: true
     environment:
       - 'API_QUERIES_PER_TEAM={"1": 100}'
@@ -235,13 +235,13 @@ services:
     volumes:
       - bind:
           create_host_path: true
-        source: docker/postgres-init-scripts
+        source: ./docker/postgres-init-scripts
         target: /docker-entrypoint-initdb.d
         type: bind
       - bind:
           create_host_path: true
         read_only: true
-        source: products
+        source: ./products
         target: /products
         type: bind
       - source: postgres-data
@@ -323,11 +323,10 @@ services:
       default: null
     restart: on-failure
     volumes:
-      - bind:
-          create_host_path: true
-        source: share
+      - source: posthog-share
         target: /share
-        type: bind
+        type: volume
+        volume: {}
   geoip-init:
     command:
       - /bin/sh
@@ -409,6 +408,11 @@ services:
     networks:
       default: null
     restart: on-failure
+    volumes:
+      - source: posthog-share
+        target: /share
+        type: volume
+        volume: {}
   ingestion-general:
     command: node nodejs/dist/index.js
     depends_on:
@@ -448,6 +452,11 @@ services:
     networks:
       default: null
     restart: on-failure
+    volumes:
+      - source: posthog-share
+        target: /share
+        type: volume
+        volume: {}
   ingestion-logs:
     command: node nodejs/dist/index.js
     depends_on:
@@ -475,6 +484,11 @@ services:
     networks:
       default: null
     restart: on-failure
+    volumes:
+      - source: posthog-share
+        target: /share
+        type: volume
+        volume: {}
   ingestion-sessionreplay:
     command: node nodejs/dist/index.js
     depends_on:
@@ -509,6 +523,11 @@ services:
     networks:
       default: null
     restart: on-failure
+    volumes:
+      - source: posthog-share
+        target: /share
+        type: volume
+        volume: {}
   ingestion-traces:
     command: node nodejs/dist/index.js
     depends_on:
@@ -536,6 +555,11 @@ services:
     networks:
       default: null
     restart: on-failure
+    volumes:
+      - source: posthog-share
+        target: /share
+        type: volume
+        volume: {}
   kafka:
     command:
       - redpanda
@@ -751,6 +775,9 @@ services:
       default: null
     restart: on-failure
   plugins:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
     command: node nodejs/dist/index.js
     depends_on:
       clickhouse:
@@ -1058,6 +1085,11 @@ services:
     networks:
       default: null
     restart: on-failure
+    volumes:
+      - source: posthog-share
+        target: /share
+        type: volume
+        volume: {}
   redis7:
     command: redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb
     healthcheck:
@@ -1240,7 +1272,7 @@ services:
         condition: service_started
         required: true
     env_file:
-      - path: .env.services
+      - path: ./.env.services
         required: true
     environment:
       - 'API_QUERIES_PER_TEAM={"1": 100}'
@@ -1313,7 +1345,7 @@ services:
         condition: service_started
         required: true
     env_file:
-      - path: .env.services
+      - path: ./.env.services
         required: true
     environment:
       - 'API_QUERIES_PER_TEAM={"1": 100}'
@@ -1378,7 +1410,7 @@ services:
         condition: service_started
         required: true
     env_file:
-      - path: .env.services
+      - path: ./.env.services
         required: true
     environment:
       - 'API_QUERIES_PER_TEAM={"1": 100}'

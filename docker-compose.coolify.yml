@@ -157,6 +157,9 @@ services:
             - personhog-router
 
     plugins:
+        build:
+            context: .
+            dockerfile: Dockerfile.node
         extends:
             file: docker-compose.base.yml
             service: plugins
@@ -201,6 +204,8 @@ services:
             service: ingestion-general
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         environment:
             PERSONS_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             BEHAVIORAL_COHORTS_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -217,6 +222,8 @@ services:
             service: ingestion-sessionreplay
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         environment:
             SESSION_RECORDING_V2_S3_ACCESS_KEY_ID: 'any'
             SESSION_RECORDING_V2_S3_SECRET_ACCESS_KEY: 'any'
@@ -235,6 +242,8 @@ services:
             service: recording-api
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         environment:
             ENCRYPTION_SALT_KEYS: $ENCRYPTION_SALT_KEYS
         depends_on:
@@ -248,6 +257,8 @@ services:
             service: ingestion-error-tracking
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         environment:
             ENCRYPTION_SALT_KEYS: $ENCRYPTION_SALT_KEYS
         depends_on:
@@ -261,6 +272,8 @@ services:
             service: ingestion-logs
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         depends_on:
             - db
             - redis7
@@ -272,6 +285,8 @@ services:
             service: ingestion-traces
         image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         depends_on:
             - db
             - redis7
@@ -510,6 +525,8 @@ services:
             file: docker-compose.base.yml
             service: feature-flags
         logging: *default-logging
+        volumes:
+            - posthog-share:/share
         depends_on:
             - db
             - redis7
