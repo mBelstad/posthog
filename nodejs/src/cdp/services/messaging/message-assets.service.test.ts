@@ -132,17 +132,21 @@ describe('MessageAssetsService', () => {
     })
 
     describe('buildRowForPush', () => {
-        it('records the delivered platforms and renders the notification the recipient saw', () => {
+        it('names the person as the recipient and records the platforms in the preview', () => {
+            // The Assets tab shows `recipient` as its RECIPIENT column, and for email that is the
+            // address — so a push has to name who it reached, not which providers carried it.
             const row = service.buildRowForPush(invocationWithAction('flow-1', 7), pushParams(), ['Firebase', 'APNs'])
 
             expect(row).not.toBeNull()
             expect(row!.kind).toBe('push')
             expect(row!.team_id).toBe(7)
             expect(row!.subject).toBe('Your order shipped')
-            expect(row!.recipient).toBe('Firebase, APNs')
+            expect(row!.recipient).toBe(row!.distinct_id)
+            expect(row!.recipient).not.toBe('Firebase, APNs')
             expect(row!.status).toBe('sent')
             expect(row!.html).toContain('Your order shipped')
             expect(row!.html).toContain('Track it in the app')
+            expect(row!.html).toContain('Delivered via Firebase, APNs')
         })
 
         it('captures nothing when the push reached no device', () => {

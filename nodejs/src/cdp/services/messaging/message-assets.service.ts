@@ -79,14 +79,19 @@ const escapeHtml = (text: string): string => text.replace(/[&<>"']/g, (c) => HTM
 // Only the parts the recipient actually saw are rendered. The custom `data` payload is deliberately
 // left out: it is app routing context, not user-visible, and can carry arbitrary customer data we
 // should not be re-displaying in the UI.
-const renderPushPreviewHtml = (payload: PushNotificationPayloadType): string => {
+const renderPushPreviewHtml = (payload: PushNotificationPayloadType, platforms: string[]): string => {
     const image = payload.image
         ? `<img src="${escapeHtml(payload.image)}" alt="" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-top:8px">`
         : ''
     const body = payload.body
         ? `<div style="font-size:14px;line-height:1.4;color:#2d2d2d">${escapeHtml(payload.body)}</div>`
         : ''
-    return `<!doctype html><meta charset="utf-8"><div style="font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;padding:1rem;max-width:420px;margin:1rem auto"><div style="background:#f4f4f5;border-radius:14px;padding:12px 14px"><div style="font-size:15px;font-weight:600;color:#111;margin-bottom:2px">${escapeHtml(payload.title)}</div>${body}${image}</div></div>`
+    // `recipient` names the person, matching email, so the channels that took delivery are recorded
+    // here instead of in that column.
+    const deliveredVia = platforms.length
+        ? `<div style="font-size:12px;color:#6b7280;margin-top:8px;text-align:center">Delivered via ${escapeHtml(platforms.join(', '))}</div>`
+        : ''
+    return `<!doctype html><meta charset="utf-8"><div style="font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;padding:1rem;max-width:420px;margin:1rem auto"><div style="background:#f4f4f5;border-radius:14px;padding:12px 14px"><div style="font-size:15px;font-weight:600;color:#111;margin-bottom:2px">${escapeHtml(payload.title)}</div>${body}${image}</div>${deliveredVia}</div>`
 }
 
 const oversizedPlaceholderHtml = (bytes: number): string => {
@@ -169,6 +174,7 @@ export class MessageAssetsService {
         if (platforms.length === 0) {
             return null
         }
+        const recipient = params.distinctId ?? resolveEmailEngagementDistinctId(invocation) ?? ''
         return {
             team_id: invocation.teamId,
             function_kind: 'hog_flow',
@@ -177,15 +183,17 @@ export class MessageAssetsService {
             invocation_id: invocation.id,
             action_id: invocation.state.actionId ?? '',
             kind: 'push',
-            distinct_id: params.distinctId ?? resolveEmailEngagementDistinctId(invocation) ?? '',
+            distinct_id: recipient,
             person_id: invocation.state.globals.person?.id ?? '',
-            recipient: platforms.join(', '),
+            // Who the notification went to, not which providers carried it — the Assets tab shows this
+            // as RECIPIENT, and for email it is the address. The channels are in the preview instead.
+            recipient,
             subject: payload.title,
             status: 'sent',
             sent_at: isoMicroseconds(new Date()),
             version: microsecondsSinceEpoch(),
             is_deleted: 0,
-            html: renderPushPreviewHtml(payload),
+            html: renderPushPreviewHtml(payload, platforms),
         }
     }
 
