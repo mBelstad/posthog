@@ -80,10 +80,16 @@ class MessageAssetSerializer(serializers.Serializer):
     )
     distinct_id = serializers.CharField(help_text="The recipient's distinct_id.")
     person_id = serializers.CharField(help_text="The recipient's person UUID, if resolved.")
-    recipient = serializers.CharField(help_text="The recipient email address.")
-    subject = serializers.CharField(help_text="The email subject line.")
-    status = serializers.CharField(help_text="Delivery status at capture time. Currently always 'sent'.")
-    sent_at = serializers.DateTimeField(help_text="When the email was sent.")
+    recipient = serializers.CharField(
+        help_text="Where the message went: the email address for 'email', or the push platforms that "
+        "took delivery for 'push' (empty when none were reachable)."
+    )
+    subject = serializers.CharField(help_text="The email subject line, or the push notification title.")
+    status = serializers.CharField(
+        help_text="Delivery status at capture time: 'sent', or 'skipped' when a push had no reachable "
+        "platform (the attempt is still recorded)."
+    )
+    sent_at = serializers.DateTimeField(help_text="When the message was sent.")
 
 
 class MessageAssetsRequestSerializer(serializers.Serializer):
