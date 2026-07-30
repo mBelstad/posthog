@@ -126,6 +126,12 @@ function pushCorrelationData(invocation: CyclotronJobInvocationHogFunction): Rec
     if (invocation.state.actionId) {
         correlation.action_id = invocation.state.actionId
     }
+    // Send metrics are attributed to `parentRunId ?? functionId`, so a batch run counts its sends
+    // against the batch job rather than the workflow. An open has to be attributable the same way or
+    // the two don't divide into a rate — which is why the email tracking code carries this id too.
+    if (invocation.parentRunId) {
+        correlation.parent_run_id = invocation.parentRunId
+    }
     return { [PUSH_CORRELATION_KEY]: JSON.stringify(correlation) }
 }
 
