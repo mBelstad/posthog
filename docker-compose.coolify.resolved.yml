@@ -3,6 +3,9 @@
 # Regenerate and validate it whenever the pinned hobby release changes.
 name: posthog
 networks:
+  coolify:
+    external: true
+    name: ${COOLIFY_RESOURCE_UUID}
   default:
     name: posthog_default
 services:
@@ -942,12 +945,30 @@ services:
       - CADDY_TLS_BLOCK=
       - SERVICE_URL_POSTHOG_80
     image: caddy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${COOLIFY_RESOURCE_UUID}
+      - traefik.http.middlewares.posthog-gzip.compress=true
+      - traefik.http.middlewares.posthog-https.redirectscheme.scheme=https
+      - traefik.http.routers.posthog-http.entryPoints=http
+      - traefik.http.routers.posthog-http.middlewares=posthog-https
+      - traefik.http.routers.posthog-http.rule=Host(`analytics.itagenten.no`) && PathPrefix(`/`)
+      - traefik.http.routers.posthog-http.service=posthog-http
+      - traefik.http.routers.posthog-https.entryPoints=https
+      - traefik.http.routers.posthog-https.middlewares=posthog-gzip
+      - traefik.http.routers.posthog-https.rule=Host(`analytics.itagenten.no`) && PathPrefix(`/`)
+      - traefik.http.routers.posthog-https.service=posthog-https
+      - traefik.http.routers.posthog-https.tls=true
+      - traefik.http.routers.posthog-https.tls.certresolver=letsencrypt
+      - traefik.http.services.posthog-http.loadbalancer.server.port=80
+      - traefik.http.services.posthog-https.loadbalancer.server.port=80
     logging:
       driver: json-file
       options:
         max-file: "3"
         max-size: 50m
     networks:
+      coolify: null
       default: null
     restart: always
     volumes:
