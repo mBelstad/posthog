@@ -8,11 +8,19 @@
 #
 # Build stage: Compile nodejs and dependencies
 #
-# Coolify cannot pull PostHog's private rust-node-container image. Assemble the
-# same public toolchains from the official Rust and Node images instead.
-FROM node:24.13.0-bookworm AS node-toolchain
-FROM rust:1.91-bookworm AS nodejs-build
-COPY --from=node-toolchain /usr/local/ /usr/local/
+# Coolify cannot pull PostHog's private rust-node-container image. Start from
+# the public Node image so Corepack's shims stay intact, then add Rust with the
+# official rustup installer.
+FROM node:24.13.0-bookworm AS nodejs-build
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends ca-certificates curl; \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | \
+        sh -s -- -y --profile minimal --default-toolchain 1.91.1; \
+    rm -rf /var/lib/apt/lists/*
 
 # Compile and install system dependencies
 # Add Confluent's client repository for librdkafka 2.10.1
