@@ -389,6 +389,9 @@ services:
       kafka:
         condition: service_started
         required: true
+      personhog-router:
+        condition: service_started
+        required: true
       redis7:
         condition: service_started
         required: true
@@ -399,6 +402,9 @@ services:
       - KAFKA_HOSTS=kafka:9092
       - PLUGIN_SERVER_MODE=ingestion-errortracking
       - REDIS_URL=redis://redis7:6379/
+      - PERSONHOG_ADDR=personhog-router:50052
+      - PERSONHOG_ENABLED=true
+      - PERSONHOG_ROLLOUT_PERCENTAGE=100
     image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
     logging:
       driver: json-file
@@ -795,6 +801,9 @@ services:
       objectstorage:
         condition: service_started
         required: true
+      personhog-router:
+        condition: service_started
+        required: true
       redis7:
         condition: service_started
         required: true
@@ -821,6 +830,9 @@ services:
       - OBJECT_STORAGE_PUBLIC_ENDPOINT=https://$DOMAIN
       - OBJECT_STORAGE_SECRET_ACCESS_KEY=object_storage_root_password
       - OTEL_EXPORTER_OTLP_ENDPOINT=
+      - PERSONHOG_ADDR=personhog-router:50052
+      - PERSONHOG_ENABLED=true
+      - PERSONHOG_ROLLOUT_PERCENTAGE=100
       - SECRET_KEY=$POSTHOG_SECRET
       - SITE_URL=https://$DOMAIN
     image: ${REGISTRY_URL}-node:${POSTHOG_NODE_TAG:-latest}
