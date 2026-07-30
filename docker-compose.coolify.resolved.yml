@@ -39,8 +39,8 @@ services:
     build:
       args:
         BIN: capture
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     environment:
       ADDRESS: 0.0.0.0:3000
       CAPTURE_MODE: events
@@ -137,8 +137,8 @@ services:
     build:
       args:
         BIN: cyclotron-janitor
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       db:
         condition: service_healthy
@@ -163,8 +163,8 @@ services:
     build:
       args:
         BIN: cymbal
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       db:
         condition: service_healthy
@@ -283,8 +283,8 @@ services:
     build:
       args:
         BIN: feature-flags
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       db:
         condition: service_started
@@ -352,8 +352,8 @@ services:
     build:
       args:
         BIN: hypercache-server
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       redis7:
         condition: service_started
@@ -702,8 +702,8 @@ services:
     build:
       args:
         BIN: personhog-replica
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       db:
         condition: service_healthy
@@ -726,8 +726,8 @@ services:
     build:
       args:
         BIN: personhog-router
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       personhog-replica:
         condition: service_started
@@ -811,8 +811,8 @@ services:
     build:
       args:
         BIN: property-defs-rs
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     depends_on:
       db:
         condition: service_healthy
@@ -1083,8 +1083,8 @@ services:
     build:
       args:
         BIN: capture
-      context: ./rust
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: rust/Dockerfile.coolify
     environment:
       ADDRESS: 0.0.0.0:3000
       CAPTURE_MODE: recordings

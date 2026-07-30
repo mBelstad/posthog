@@ -420,7 +420,8 @@ services:
             file: docker-compose.base.yml
             service: cyclotron-janitor
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         logging: *default-logging
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -433,7 +434,8 @@ services:
 
     capture:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: capture
@@ -441,7 +443,8 @@ services:
 
     replay-capture:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: replay-capture
@@ -449,7 +452,8 @@ services:
 
     property-defs-rs:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: property-defs-rs
@@ -472,7 +476,8 @@ services:
 
     personhog-replica:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: personhog-replica
@@ -485,7 +490,8 @@ services:
 
     personhog-router:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: personhog-router
@@ -495,7 +501,8 @@ services:
 
     feature-flags:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: feature-flags
@@ -506,7 +513,8 @@ services:
 
     hypercache-server:
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
         extends:
             file: docker-compose.base.yml
             service: hypercache-server
@@ -580,7 +588,8 @@ services:
     cymbal:
         image: ghcr.io/posthog/posthog/cymbal:master
         build:
-            context: ./rust
+            context: .
+            dockerfile: rust/Dockerfile.coolify
             args:
                 BIN: cymbal
         restart: on-failure
