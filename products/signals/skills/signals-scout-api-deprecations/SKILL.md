@@ -252,11 +252,11 @@ the customer-facing upgrade path instead.
   migrated), content: headline + cutoff + the fixing PR/commit. Don't refile.
 - `cleared:api-dep:<host>:<endpoint>` — researched and current, content: `"current as of {date};
 re-check after {date + 90d, or 30d before any estimated sunset}"`. Scope to the endpoint, not the
-whole host: clearing `graph.facebook.com/v22.0` must not suppress research on a different endpoint
-or version on the same host.
+  whole host: clearing `graph.facebook.com/v22.0` must not suppress research on a different endpoint
+  or version on the same host.
 - `noise:api-dep:<host>:<endpoint>` — triaged as non-API (docs/scope/asset), so future runs skip
-the research for that path. Never key noise to the bare host — a docs link on `some.vendor.com`
-must not stop future runs from researching a genuine API call site on the same host.
+  the research for that path. Never key noise to the bare host — a docs link on `some.vendor.com`
+  must not stop future runs from researching a genuine API call site on the same host.
 - `reviewer:api-dep:<area>` — cached `suggested_reviewers` routing for an integration area, content:
   the resolved `github_login` / `user_uuid`.
 - `last-scan:api-deprecations` — overwrite each full scan: repo HEAD sha + timestamp + counts.
