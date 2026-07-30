@@ -60,6 +60,7 @@
 !requirements.txt
 !rust
 !proto
+!proto/**
 !share/GeoLite2-City.mmdb
 !staticfiles
 !tailwind.config.js
