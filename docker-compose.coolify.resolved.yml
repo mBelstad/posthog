@@ -159,6 +159,26 @@ services:
     networks:
       default: null
     restart: on-failure
+  cyclotron-migrate:
+    build:
+      context: ./rust
+      dockerfile: Dockerfile.sqlx-migrate
+    command: cyclotron-node
+    depends_on:
+      db:
+        condition: service_healthy
+        required: true
+    environment:
+      CYCLOTRON_NODE_DATABASE_URL: postgres://posthog:posthog@db:5432/cyclotron_node
+    image: ${REGISTRY_URL}-sqlx-migrate:${POSTHOG_APP_TAG}
+    logging:
+      driver: json-file
+      options:
+        max-file: "3"
+        max-size: 50m
+    networks:
+      default: null
+    restart: "no"
   cymbal:
     build:
       args:
@@ -788,6 +808,9 @@ services:
     depends_on:
       clickhouse:
         condition: service_started
+        required: true
+      cyclotron-migrate:
+        condition: service_completed_successfully
         required: true
       db:
         condition: service_started

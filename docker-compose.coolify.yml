@@ -23,6 +23,20 @@ services:
         volumes:
             - postgres-data:/var/lib/postgresql/data
 
+    cyclotron-migrate:
+        build:
+            context: ./rust
+            dockerfile: Dockerfile.sqlx-migrate
+        image: ${REGISTRY_URL}-sqlx-migrate:${POSTHOG_APP_TAG}
+        command: cyclotron-node
+        restart: "no"
+        logging: *default-logging
+        environment:
+            CYCLOTRON_NODE_DATABASE_URL: 'postgres://posthog:posthog@db:5432/cyclotron_node'
+        depends_on:
+            db:
+                condition: service_healthy
+
     redis7:
         extends:
             file: docker-compose.base.yml
@@ -187,6 +201,8 @@ services:
         volumes:
             - posthog-share:/share
         depends_on:
+            cyclotron-migrate:
+                condition: service_completed_successfully
             geoip-init:
                 condition: service_completed_successfully
             db:
