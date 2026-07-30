@@ -39,7 +39,7 @@ services:
     build:
       args:
         BIN: capture
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     environment:
       ADDRESS: 0.0.0.0:3000
@@ -96,37 +96,37 @@ services:
     volumes:
       - bind:
           create_host_path: true
-        source: ./posthog/posthog/idl
+        source: ./posthog/idl
         target: /idl
         type: bind
       - bind:
           create_host_path: true
-        source: ./posthog/docker/clickhouse/docker-entrypoint-initdb.d
+        source: ./docker/clickhouse/docker-entrypoint-initdb.d
         target: /docker-entrypoint-initdb.d
         type: bind
       - bind:
           create_host_path: true
-        source: ./posthog/docker/clickhouse/config.xml
+        source: ./docker/clickhouse/config.xml
         target: /etc/clickhouse-server/config.xml
         type: bind
       - bind:
           create_host_path: true
-        source: ./posthog/docker/clickhouse/config.d/default.xml
+        source: ./docker/clickhouse/config.d/default.xml
         target: /etc/clickhouse-server/config.d/default.xml
         type: bind
       - bind:
           create_host_path: true
-        source: ./posthog/docker/clickhouse/users.xml
+        source: ./docker/clickhouse/users.xml
         target: /etc/clickhouse-server/users.xml
         type: bind
       - bind:
           create_host_path: true
-        source: ./posthog/docker/clickhouse/user_defined_function.xml
+        source: ./docker/clickhouse/user_defined_function.xml
         target: /etc/clickhouse-server/user_defined_function.xml
         type: bind
       - bind:
           create_host_path: true
-        source: ./posthog/posthog/user_scripts
+        source: ./posthog/user_scripts
         target: /var/lib/clickhouse/user_scripts
         type: bind
       - source: clickhouse-data
@@ -137,7 +137,7 @@ services:
     build:
       args:
         BIN: cyclotron-janitor
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       db:
@@ -163,7 +163,7 @@ services:
     build:
       args:
         BIN: cymbal
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       db:
@@ -283,7 +283,7 @@ services:
     build:
       args:
         BIN: feature-flags
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       db:
@@ -352,7 +352,7 @@ services:
     build:
       args:
         BIN: hypercache-server
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       redis7:
@@ -675,7 +675,7 @@ services:
     volumes:
       - bind:
           create_host_path: true
-        source: ./posthog/docker/livestream/configs-hobby.yml
+        source: ./docker/livestream/configs-hobby.yml
         target: /configs/configs.yml
         type: bind
   objectstorage:
@@ -702,7 +702,7 @@ services:
     build:
       args:
         BIN: personhog-replica
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       db:
@@ -726,7 +726,7 @@ services:
     build:
       args:
         BIN: personhog-router
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       personhog-replica:
@@ -811,7 +811,7 @@ services:
     build:
       args:
         BIN: property-defs-rs
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     depends_on:
       db:
@@ -1083,7 +1083,7 @@ services:
     build:
       args:
         BIN: capture
-      context: ./posthog/rust
+      context: ./rust
       dockerfile: Dockerfile
     environment:
       ADDRESS: 0.0.0.0:3000
@@ -1192,7 +1192,7 @@ services:
     volumes:
       - bind:
           create_host_path: true
-        source: ./posthog/docker/temporal/dynamicconfig
+        source: ./docker/temporal/dynamicconfig
         target: /etc/temporal/config/dynamicconfig
         type: bind
   temporal-admin-tools:

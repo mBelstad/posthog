@@ -45,13 +45,13 @@ services:
             - kafka
             - zookeeper
         volumes:
-            - ./posthog/posthog/idl:/idl
-            - ./posthog/docker/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-            - ./posthog/docker/clickhouse/config.xml:/etc/clickhouse-server/config.xml
-            - ./posthog/docker/clickhouse/config.d/default.xml:/etc/clickhouse-server/config.d/default.xml
-            - ./posthog/docker/clickhouse/users.xml:/etc/clickhouse-server/users.xml
-            - ./posthog/docker/clickhouse/user_defined_function.xml:/etc/clickhouse-server/user_defined_function.xml
-            - ./posthog/posthog/user_scripts:/var/lib/clickhouse/user_scripts
+            - ./posthog/idl:/idl
+            - ./docker/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+            - ./docker/clickhouse/config.xml:/etc/clickhouse-server/config.xml
+            - ./docker/clickhouse/config.d/default.xml:/etc/clickhouse-server/config.d/default.xml
+            - ./docker/clickhouse/users.xml:/etc/clickhouse-server/users.xml
+            - ./docker/clickhouse/user_defined_function.xml:/etc/clickhouse-server/user_defined_function.xml
+            - ./posthog/user_scripts:/var/lib/clickhouse/user_scripts
             - clickhouse-data:/var/lib/clickhouse
 
     zookeeper:
@@ -371,7 +371,7 @@ services:
         environment:
             - ENABLE_ES=false
         volumes:
-            - ./posthog/docker/temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
+            - ./docker/temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
     elasticsearch:
         extends:
             file: docker-compose.base.yml
@@ -420,7 +420,7 @@ services:
             file: docker-compose.base.yml
             service: cyclotron-janitor
         build:
-            context: ./posthog/rust
+            context: ./rust
         logging: *default-logging
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -433,7 +433,7 @@ services:
 
     capture:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: capture
@@ -441,7 +441,7 @@ services:
 
     replay-capture:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: replay-capture
@@ -449,7 +449,7 @@ services:
 
     property-defs-rs:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: property-defs-rs
@@ -468,11 +468,11 @@ services:
         environment:
             - LIVESTREAM_JWT_SECRET=${POSTHOG_SECRET}
         volumes:
-            - ./posthog/docker/livestream/configs-hobby.yml:/configs/configs.yml
+            - ./docker/livestream/configs-hobby.yml:/configs/configs.yml
 
     personhog-replica:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: personhog-replica
@@ -485,7 +485,7 @@ services:
 
     personhog-router:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: personhog-router
@@ -495,7 +495,7 @@ services:
 
     feature-flags:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: feature-flags
@@ -506,7 +506,7 @@ services:
 
     hypercache-server:
         build:
-            context: ./posthog/rust
+            context: ./rust
         extends:
             file: docker-compose.base.yml
             service: hypercache-server
@@ -580,7 +580,7 @@ services:
     cymbal:
         image: ghcr.io/posthog/posthog/cymbal:master
         build:
-            context: ./posthog/rust
+            context: ./rust
             args:
                 BIN: cymbal
         restart: on-failure
