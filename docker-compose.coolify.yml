@@ -366,6 +366,8 @@ services:
             file: docker-compose.base.yml
             service: temporal
         logging: *default-logging
+        labels:
+            - kompose.volume.type=configMap
         environment:
             - ENABLE_ES=false
         volumes:

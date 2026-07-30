@@ -1135,7 +1135,7 @@ services:
       timeout: 5s
     image: temporalio/auto-setup:1.26.2
     labels:
-      kompose.volume.type: configMap
+      - kompose.volume.type=configMap
     logging:
       driver: json-file
       options:
