@@ -580,6 +580,7 @@ services:
     kafka-init:
         image: docker.redpanda.com/redpandadata/redpanda:v25.1.9
         entrypoint: /bin/sh
+        restart: "no"
         logging: *default-logging
         command:
             - -c

@@ -709,6 +709,7 @@ services:
         max-size: 50m
     networks:
       default: null
+    restart: "no"
   livestream:
     build:
       context: ./livestream
