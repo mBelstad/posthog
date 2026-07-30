@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pyarrow as pa
+import deltalake.exceptions
 from parameterized import parameterized
 
 from products.warehouse_sources.backend.models.external_data_schema import ExternalDataSchema
@@ -181,6 +182,15 @@ class TestRunPostLoadDeltaMaintenance:
             # tick's maintenance retries the same idempotent cleanup) and must not be promoted
             # into a fresh error-tracking issue — the regression this guards.
             ("transient_s3_slowdown", OSError("Generic S3 error: Please reduce your request rate."), False),
+            # Same non-fatal handling for a concurrent-maintenance DeltaError (e.g. a full_refresh
+            # reset losing a `_delta_log` commit file out from under this same compact/vacuum call).
+            (
+                "transient_delta_maintenance_race",
+                deltalake.exceptions.DeltaError(
+                    "Generic error: Kernel error: File not found: table/_delta_log/00000000000000000001.json"
+                ),
+                False,
+            ),
         ]
     )
     @pytest.mark.asyncio
@@ -201,6 +211,13 @@ class TestRunPostLoadDeltaMaintenance:
         [
             ("genuine_bug", RuntimeError("compaction blew up"), True),
             ("transient_s3_slowdown", OSError("Generic S3 error: Please reduce your request rate."), False),
+            (
+                "transient_delta_maintenance_race",
+                deltalake.exceptions.DeltaError(
+                    "Generic error: Kernel error: File not found: table/_delta_log/00000000000000000001.json"
+                ),
+                False,
+            ),
         ]
     )
     @pytest.mark.asyncio
