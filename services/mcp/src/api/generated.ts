@@ -36654,6 +36654,7 @@ export namespace Schemas {
      * * `pardot` - Pardot
      * * `pinterest-ads` - Pinterest Ads
      * * `postgresql` - Postgresql
+     * * `posthog` - Posthog
      * * `reddit-ads` - Reddit Ads
      * * `resend` - Resend
      * * `s3-compatible` - S3 Compatible
@@ -36701,6 +36702,7 @@ export namespace Schemas {
       Pardot: 'pardot',
       PinterestAds: 'pinterest-ads',
       Postgresql: 'postgresql',
+      Posthog: 'posthog',
       RedditAds: 'reddit-ads',
       Resend: 'resend',
       S3Compatible: 's3-compatible',
@@ -36748,6 +36750,7 @@ export namespace Schemas {
        * * `pardot` - Pardot
        * * `pinterest-ads` - Pinterest Ads
        * * `postgresql` - Postgresql
+       * * `posthog` - Posthog
        * * `reddit-ads` - Reddit Ads
        * * `resend` - Resend
        * * `s3-compatible` - S3 Compatible
@@ -55320,6 +55323,53 @@ export namespace Schemas {
       priority: string | null;
       labels: unknown[];
       createdAt: string | null;
+    }
+
+    /**
+     * Query parameters to send to the target.
+     */
+    export type PostHogConnectionForwardQuery = {[key: string]: string};
+
+    /**
+     * * `GET` - GET
+     * * `POST` - POST
+     * * `PUT` - PUT
+     * * `PATCH` - PATCH
+     * * `DELETE` - DELETE
+     */
+    export type PostHogConnectionForwardMethodEnum = typeof PostHogConnectionForwardMethodEnum[keyof typeof PostHogConnectionForwardMethodEnum];
+
+
+    export const PostHogConnectionForwardMethodEnum = {
+      Get: 'GET',
+      Post: 'POST',
+      Put: 'PUT',
+      Patch: 'PATCH',
+      Delete: 'DELETE',
+    } as const;
+
+    export interface PostHogConnectionForward {
+      /** HTTP method to use against the target project's API.
+       *
+       * * `GET` - GET
+       * * `POST` - POST
+       * * `PUT` - PUT
+       * * `PATCH` - PATCH
+       * * `DELETE` - DELETE */
+      method: PostHogConnectionForwardMethodEnum;
+      /** Relative target API path with no host or scheme, e.g. `api/projects/2/insights/`. */
+      path: string;
+      /** Query parameters to send to the target. */
+      query?: PostHogConnectionForwardQuery;
+      /** JSON request body for write methods. */
+      data?: unknown;
+    }
+
+    export interface PostHogConnectionForwardResponse {
+      /** HTTP status the target project returned. */
+      status: number;
+      /** The target project's response body, passed through. */
+      data: unknown;
     }
 
     /**
@@ -78343,6 +78393,7 @@ export namespace Schemas {
      * * `pardot` - Pardot
      * * `pinterest-ads` - Pinterest Ads
      * * `postgresql` - Postgresql
+     * * `posthog` - Posthog
      * * `reddit-ads` - Reddit Ads
      * * `resend` - Resend
      * * `s3-compatible` - S3 Compatible
@@ -78401,6 +78452,7 @@ export namespace Schemas {
       Pardot: 'pardot',
       PinterestAds: 'pinterest-ads',
       Postgresql: 'postgresql',
+      Posthog: 'posthog',
       RedditAds: 'reddit-ads',
       Resend: 'resend',
       S3Compatible: 's3-compatible',
