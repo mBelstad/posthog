@@ -158,6 +158,18 @@ describe('MessageAssetsService', () => {
             expect(row).toBeNull()
         })
 
+        it('renders the iOS subtitle, which the recipient sees as a second line', () => {
+            // Delivered via the APNS alert, so a snapshot without it doesn't match the notification
+            // that actually arrived on the device.
+            const row = service.buildRowForPush(
+                invocationWithAction('flow-1'),
+                pushParams({ apns: { subtitle: 'Your account is ready' } }),
+                ['APNs']
+            )
+
+            expect(row!.html).toContain('Your account is ready')
+        })
+
         it('keeps the custom data payload out of the stored preview', () => {
             // `data` is app routing context rather than something the recipient saw, and can carry
             // arbitrary customer values we should not re-render in the UI.

@@ -83,6 +83,11 @@ const renderPushPreviewHtml = (payload: PushNotificationPayloadType, platforms: 
     const image = payload.image
         ? `<img src="${escapeHtml(payload.image)}" alt="" style="width:100%;max-height:180px;object-fit:cover;border-radius:8px;margin-top:8px">`
         : ''
+    // The recipient sees this as a second bold line under the title on iOS, so a snapshot that drops
+    // it doesn't match the notification that was delivered.
+    const subtitle = payload.apns?.subtitle
+        ? `<div style="font-size:15px;font-weight:600;color:#111;margin-bottom:2px">${escapeHtml(payload.apns.subtitle)}</div>`
+        : ''
     const body = payload.body
         ? `<div style="font-size:14px;line-height:1.4;color:#2d2d2d">${escapeHtml(payload.body)}</div>`
         : ''
@@ -91,7 +96,7 @@ const renderPushPreviewHtml = (payload: PushNotificationPayloadType, platforms: 
     const deliveredVia = platforms.length
         ? `<div style="font-size:12px;color:#6b7280;margin-top:8px;text-align:center">Delivered via ${escapeHtml(platforms.join(', '))}</div>`
         : ''
-    return `<!doctype html><meta charset="utf-8"><div style="font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;padding:1rem;max-width:420px;margin:1rem auto"><div style="background:#f4f4f5;border-radius:14px;padding:12px 14px"><div style="font-size:15px;font-weight:600;color:#111;margin-bottom:2px">${escapeHtml(payload.title)}</div>${body}${image}</div>${deliveredVia}</div>`
+    return `<!doctype html><meta charset="utf-8"><div style="font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;padding:1rem;max-width:420px;margin:1rem auto"><div style="background:#f4f4f5;border-radius:14px;padding:12px 14px"><div style="font-size:15px;font-weight:600;color:#111;margin-bottom:2px">${escapeHtml(payload.title)}</div>${subtitle}${body}${image}</div>${deliveredVia}</div>`
 }
 
 const oversizedPlaceholderHtml = (bytes: number): string => {
