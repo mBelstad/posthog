@@ -15,6 +15,7 @@ x-logging: &default-logging
 
 services:
     db:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: db
@@ -38,6 +39,7 @@ services:
                 condition: service_healthy
 
     redis7:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: redis7
@@ -53,7 +55,7 @@ services:
         extends:
             file: docker-compose.base.yml
             service: clickhouse
-        restart: on-failure
+        restart: unless-stopped
         logging: *default-logging
         depends_on:
             - kafka
@@ -69,6 +71,7 @@ services:
             - clickhouse-data:/var/lib/clickhouse
 
     zookeeper:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: zookeeper
@@ -81,6 +84,7 @@ services:
             - zookeeper-data:/data
             - zookeeper-logs:/logs
     kafka:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: kafka
@@ -95,6 +99,7 @@ services:
             - kafka-data:/bitnami/kafka
 
     worker:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: worker
@@ -131,6 +136,7 @@ services:
             personhog-router:
                 condition: service_started
     web:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: web
@@ -171,6 +177,7 @@ services:
             - personhog-router
 
     plugins:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: Dockerfile.node
@@ -221,6 +228,7 @@ services:
                 condition: service_started
 
     ingestion-general:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: ingestion-general
@@ -239,6 +247,7 @@ services:
             - kafka
 
     ingestion-sessionreplay:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: ingestion-sessionreplay
@@ -259,6 +268,7 @@ services:
             - seaweedfs
 
     recording-api:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: recording-api
@@ -274,6 +284,7 @@ services:
             - clickhouse
 
     ingestion-error-tracking:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: ingestion-error-tracking
@@ -293,6 +304,7 @@ services:
             - personhog-router
 
     ingestion-logs:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: ingestion-logs
@@ -310,6 +322,7 @@ services:
             - kafka
 
     ingestion-traces:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: ingestion-traces
@@ -325,6 +338,7 @@ services:
             - kafka
 
     proxy:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: proxy
@@ -367,7 +381,7 @@ services:
         # Dev/CI stacks use SeaweedFS-backed objectstorage from docker-compose.base.yml,
         # but hobby keeps MinIO so bin/migrate-storage-hobby still has a MinIO source.
         image: minio/minio:RELEASE.2025-04-22T22-12-26Z
-        restart: on-failure
+        restart: unless-stopped
         environment:
             MINIO_ROOT_USER: object_storage_root_user
             MINIO_ROOT_PASSWORD: object_storage_root_password
@@ -382,7 +396,7 @@ services:
             file: docker-compose.base.yml
             service: seaweedfs
         container_name: '${SEAWEEDFS_DOCKER_NAME:-seaweedfs-main}'
-        restart: on-failure
+        restart: unless-stopped
         logging: *default-logging
         volumes:
             - seaweedfs:/data
@@ -412,6 +426,7 @@ services:
 
     # Temporal containers
     temporal:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: temporal
@@ -423,11 +438,13 @@ services:
         volumes:
             - ./docker/temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
     elasticsearch:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: elasticsearch
         logging: *default-logging
     temporal-admin-tools:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: temporal-admin-tools
@@ -435,6 +452,7 @@ services:
         depends_on:
             - temporal
     temporal-ui:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: temporal-ui
@@ -445,6 +463,7 @@ services:
             db:
                 condition: service_healthy
     temporal-django-worker:
+        restart: unless-stopped
         command: /compose/temporal-django-worker
         extends:
             file: docker-compose.base.yml
@@ -466,6 +485,7 @@ services:
             - temporal
 
     cyclotron-janitor:
+        restart: unless-stopped
         extends:
             file: docker-compose.base.yml
             service: cyclotron-janitor
@@ -483,6 +503,7 @@ services:
                 condition: service_started
 
     capture:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -492,6 +513,7 @@ services:
         logging: *default-logging
 
     replay-capture:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -501,6 +523,7 @@ services:
         logging: *default-logging
 
     property-defs-rs:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -515,6 +538,7 @@ services:
                 condition: service_healthy
 
     livestream:
+        restart: unless-stopped
         build:
             context: ./livestream
             dockerfile: Dockerfile
@@ -528,6 +552,7 @@ services:
             - ./docker/livestream/configs-hobby.yml:/configs/configs.yml
 
     personhog-replica:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -542,6 +567,7 @@ services:
                 condition: service_healthy
 
     personhog-router:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -553,6 +579,7 @@ services:
             - personhog-replica
 
     feature-flags:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -567,6 +594,7 @@ services:
             - redis7
 
     hypercache-server:
+        restart: unless-stopped
         build:
             context: .
             dockerfile: rust/Dockerfile.coolify
@@ -648,7 +676,7 @@ services:
             dockerfile: rust/Dockerfile.coolify
             args:
                 BIN: cymbal
-        restart: on-failure
+        restart: unless-stopped
         logging: *default-logging
         volumes:
             - posthog-share:/share

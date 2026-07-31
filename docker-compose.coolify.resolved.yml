@@ -66,7 +66,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   clickhouse:
     depends_on:
       kafka:
@@ -93,7 +93,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - bind:
           create_host_path: true
@@ -159,7 +159,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   cyclotron-migrate:
     build:
       context: ./rust
@@ -225,7 +225,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -252,7 +252,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - bind:
           create_host_path: true
@@ -296,6 +296,7 @@ services:
         max-size: 50m
     networks:
       default: null
+    restart: unless-stopped
     volumes:
       - target: /var/lib/elasticsearch/data
         type: volume
@@ -342,7 +343,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -400,7 +401,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   ingestion-error-tracking:
     command: node nodejs/dist/index.js
     depends_on:
@@ -434,7 +435,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -478,7 +479,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -511,7 +512,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -550,7 +551,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -583,7 +584,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -630,7 +631,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: redpanda-data
         target: /var/lib/redpanda/data
@@ -728,7 +729,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - bind:
           create_host_path: true
@@ -749,7 +750,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: objectstorage
         target: /data
@@ -778,7 +779,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   personhog-router:
     build:
       args:
@@ -803,7 +804,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   plugins:
     build:
       context: .
@@ -871,7 +872,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -904,7 +905,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   proxy:
     command: -c 'set -x && echo "$$CADDYFILE" > /etc/caddy/Caddyfile && echo "$$CADDY_EXTRA_CONFIG" >> /etc/caddy/Caddyfile && exec caddy run -c /etc/caddy/Caddyfile'
     depends_on:
@@ -1080,7 +1081,7 @@ services:
     networks:
       coolify: null
       default: null
-    restart: always
+    restart: unless-stopped
     volumes:
       - target: /root/.caddy
         type: volume
@@ -1124,7 +1125,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: posthog-share
         target: /share
@@ -1148,7 +1149,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: redis7-data
         target: /data
@@ -1174,7 +1175,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   seaweedfs:
     command:
       - server
@@ -1221,7 +1222,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: seaweedfs
         target: /data
@@ -1263,7 +1264,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - bind:
           create_host_path: true
@@ -1285,6 +1286,7 @@ services:
         max-size: 50m
     networks:
       default: null
+    restart: unless-stopped
     stdin_open: true
     tty: true
   temporal-django-worker:
@@ -1332,7 +1334,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - bind:
           create_host_path: true
@@ -1360,6 +1362,7 @@ services:
         max-size: 50m
     networks:
       default: null
+    restart: unless-stopped
   web:
     command: /compose/start
     depends_on:
@@ -1421,7 +1424,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - bind:
           create_host_path: true
@@ -1483,7 +1486,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
   zookeeper:
     environment:
       ZOO_AUTOPURGE_PURGEINTERVAL: 1
@@ -1496,7 +1499,7 @@ services:
         max-size: 50m
     networks:
       default: null
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - source: zookeeper-datalog
         target: /datalog
