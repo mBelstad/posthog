@@ -105,6 +105,7 @@ services:
             service: worker
         logging: *default-logging
         environment:
+            WEB_CONCURRENCY: ${POSTHOG_CELERY_CONCURRENCY:-4}
             EMAIL_ENABLED: ${EMAIL_ENABLED:-false}
             EMAIL_HOST: ${EMAIL_HOST:-}
             EMAIL_PORT: ${EMAIL_PORT:-587}
