@@ -1060,13 +1060,15 @@ services:
       - traefik.enable=true
       - traefik.docker.network=${COOLIFY_RESOURCE_UUID}
       - traefik.http.middlewares.posthog-gzip.compress=true
+      - traefik.http.middlewares.posthog-hub-embed.headers.customresponseheaders.X-Frame-Options=
+      - traefik.http.middlewares.posthog-hub-embed.headers.customresponseheaders.Content-Security-Policy=frame-ancestors 'self' https://hub.itagenten.no https://staging-hub.itagenten.no http://localhost:5173 http://127.0.0.1:5173 http://localhost:5175 http://127.0.0.1:5175
       - traefik.http.middlewares.posthog-https.redirectscheme.scheme=https
       - traefik.http.routers.posthog-http.entryPoints=http
       - traefik.http.routers.posthog-http.middlewares=posthog-https
       - traefik.http.routers.posthog-http.rule=Host(`analytics.itagenten.no`) && PathPrefix(`/`)
       - traefik.http.routers.posthog-http.service=posthog-http
       - traefik.http.routers.posthog-https.entryPoints=https
-      - traefik.http.routers.posthog-https.middlewares=posthog-gzip
+      - traefik.http.routers.posthog-https.middlewares=posthog-gzip,posthog-hub-embed
       - traefik.http.routers.posthog-https.rule=Host(`analytics.itagenten.no`) && PathPrefix(`/`)
       - traefik.http.routers.posthog-https.service=posthog-https
       - traefik.http.routers.posthog-https.tls=true
